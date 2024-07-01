@@ -1,8 +1,7 @@
 <h1 align="center">FIAP - PosTech - Arquitetura Azure .Net - 2024 - Grupo 72</h1> 
 
 <p align="center">
-<img loading="lazy" src="https://img.shields.io/github/stars/valterlei-viana/FIAP-Pos-ArquiteturaDotNet?style=social"/>
-<img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
+  <img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
 </p>
 
 # Índice 
