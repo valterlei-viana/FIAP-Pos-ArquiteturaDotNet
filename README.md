@@ -1,7 +1,7 @@
-<h1 align="center">Tech Challenge Fase #1 - Grupo 60 FIAP ©2024</h1> 
+<h1 align="center">FIAP - PosTech - Arquitetura Azure .Net - 2024 - Grupo 72</h1> 
 
 <p align="center">
-<img loading="lazy" src="https://img.shields.io/github/stars/marcosbrandi/fiap?style=social"/>
+<img loading="lazy" src="https://img.shields.io/github/stars/valterlei-viana/FIAP-Pos-ArquiteturaDotNet?style=social"/>
 <img loading="lazy" src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
 </p>
 
@@ -10,17 +10,13 @@
 * [Funcionalidades e Demonstração da Aplicação](#funcionalidades-e-demonstração-da-aplicação)
 * [Tecnologias utilizadas](#tecnologias-utilizadas)
 * [Link do Projeto no YouTube](#link-do-projeto-no-youtube)
-* [Pessoas Desenvolvedoras do Projeto](#pessoas-desenvolvedoras-do-projeto)
 
 # Descrição do Projeto
 
-* O Problema
-  - O Tech Challenge desta fase será desenvolver um aplicativo utilizando a plataforma .NET 8 para cadastro
-de contatos regionais, considerando a persistência de dados e a qualidade do software.
+Desenvolver um aplicativo utilizando a plataforma .NET 8 para cadastro de contatos regionais, considerando a persistência de dados e a qualidade do software.
 
 * Requisitos Funcionais
-  - Cadastro de contatos: permitir o cadastro de novos contatos, incluindo nome, telefone e e-mail. As‐
-socie cada contato a um DDD correspondente à região.
+  - Cadastro de contatos: permitir o cadastro de novos contatos, incluindo nome, telefone e e-mail. Associe cada contato a um DDD correspondente à região.
   - Consulta de contatos: implementar uma funcionalidade para consultar e visualizar os contatos ca‐ dastrados, os quais podem ser filtrados pelo DDD da região.
   - Atualização e exclusão: possibilitar a atualização e exclusão de contatos previamente cadastrados.
 
@@ -29,6 +25,9 @@ socie cada contato a um DDD correspondente à região.
   - Validações: implementar validações para garantir dados consistentes (por exemplo: validação de
 formato de e-mail, telefone, campos obrigatórios).
   - Testes Unitários: desenvolver testes unitários utilizando xUnit ou NUnit.
+  - Testes de integração.
+  - CI/CD.
+  - Observabilidade/Monitoramento: Prometheu e Grafana on Docker.
 
 
 # Funcionalidades e Demonstração da Aplicação
