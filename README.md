@@ -32,13 +32,13 @@ formato de e-mail, telefone, campos obrigatórios).
 
 # Funcionalidades e Demonstração da Aplicação
 - `Domain Story Telling`: 
-<img loading="lazy" width="50%" height="50%" src="https://github.com/marcosbrandi/FIAP/blob/master/Docs/Domain%20Storytelling/Domain%20Story%20Telling.jpg"/>
+<img loading="lazy" width="50%" height="50%" src="Docs/Domain Storytelling/Domain Story Telling.jpg"/>
 
 - `Schemas`: 
-<img loading="lazy" width="40%" height="40%" src="https://github.com/marcosbrandi/FIAP/blob/master/Docs/Domain%20Storytelling/Schemas.PNG"/>
+<img loading="lazy" width="40%" height="40%" src="Docs/Domain Storytelling/Schemas.PNG"/>
 
 - `Endpoints`: 
-<img loading="lazy" width="100%" height="100%" src="https://github.com/marcosbrandi/FIAP/blob/master/Docs/Domain%20Storytelling/Endpoints.PNG"/>
+<img loading="lazy" width="100%" height="100%" src="Docs/Domain Storytelling/Endpoints.PNG"/>
 
 # Tecnologias utilizadas
 - C#, .Net 8, Minimal API, InMemory Database, EF Core 8, OpenAPI
