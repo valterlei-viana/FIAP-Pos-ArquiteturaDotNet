@@ -6,13 +6,10 @@ namespace TechChallengeFIAP.API.Middleware;
 
 public static class ServiceInterfaces
 {
-    public static void Add(IServiceCollection services)
+    public static void Add(IServiceCollection pServices)
     {
-        services.AddTransient<IDDDRegionService, DDDRegionService>();
-        services.AddTransient<IContatoRepository, ContatoRepository>();
-
-
+        pServices.AddTransient<IDDDRegionService, DDDRegionService>();
+        pServices.AddTransient<IContatoRepository, ContatoRepository>();
     }
-
 }
 

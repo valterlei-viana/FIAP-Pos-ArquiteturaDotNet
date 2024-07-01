@@ -8,128 +8,132 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
 {
     public class ContatoRepository : IContatoRepository
     {
-        private FiapDbContext fiapContext;
-        private IDDDRegionService ddd_service;
-        public ContatoRepository(FiapDbContext _fiapContext, IDDDRegionService _ddd_service)
+        private FiapDbContext FiapContext;
+        private IDDDRegionService DDDService;
+
+        public ContatoRepository(FiapDbContext pFiapContext, IDDDRegionService pDDDService)
         {
-            ddd_service = _ddd_service;
-            fiapContext = _fiapContext;
-
-            //if (fiapContext.Contatos.Count() == 0)
-            //{
-            //    SeedTest.Add(fiapContext, ddd_service);
-            //}
-
+            DDDService = pDDDService;
+            FiapContext = pFiapContext;
         }
-        
+
         /// <summary>
-        /// Registra um contato na base recebendo
-        /// TODO: Verificar como criar método de consulta de Contato por e-mail
+        /// Adiciona um contato
         /// </summary>
-        /// <param name="contato"></param>
+        /// <param name="pContato"></param>
         /// <returns></returns>
-        public async Task<Contato> AddAsync(Contato contato)
+        public async Task<Contato> AddAsync(Contato pContato)
         {
-            bool emailregistrado = await CheckRegisteredEmail(contato);
+            bool emailregistrado = await CheckRegisteredEmail(pContato);
+
             if (emailregistrado)
             {
-                var dddinfo = await ddd_service.GetInfo(contato.Telefone.DDD);
-                contato.Telefone.UF = dddinfo.state;
-                fiapContext.Add(contato);
+                var dddInfo = await DDDService.GetInfo(pContato.Telefone.DDD);
+                pContato.Telefone.UF = dddInfo.UF;
+                FiapContext.Add(pContato);
             }
-            await fiapContext.SaveChangesAsync();
-            return contato;
-            
+            await FiapContext.SaveChangesAsync();
+            return pContato;
         }
-        
+
         /// <summary>
         /// Deleta um contato recebendo o id como parâmetro para encontrar o contato
         /// </summary>
-        /// <param name="contato"></param>
+        /// <param name="pContato"></param>
         /// <returns></returns>
-        public async Task DeleteAsync(Contato contato)
+        public async Task DeleteAsync(Contato pContato)
         {
-            var contatoDelete = await FindAsync(contato.Id);
-            fiapContext.Contatos.Remove(contatoDelete);
-            await fiapContext.SaveChangesAsync();
+            var contatoDelete = await FindAsync(pContato.Id);
+            FiapContext.Contatos.Remove(contatoDelete);
+            await FiapContext.SaveChangesAsync();
         }
 
 
         /// <summary>
         /// Busca e retorna um contato pelo seu id no banco, recebendo um id
         /// </summary>
-        /// <param name="ID"></param>
+        /// <param name="pID"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<Contato> FindAsync(int ID)
+        public async Task<Contato> FindAsync(int pID)
         {
-            var contato = await fiapContext.Contatos.Include(x => x.Telefone).FirstOrDefaultAsync(x=> x.Id==ID);
+            var contato = await FiapContext.Contatos.Include(x => x.Telefone).FirstOrDefaultAsync(x => x.Id == pID);
             return contato;
         }
-
 
         /// <summary>
         /// Retorna um contato pelo nome
         /// </summary>
-        /// <param nome="nome"></param>
+        /// <param nome="pNome"></param>
         /// <returns></returns>
         /// <exception cref="WarningException"></exception>
-        public async Task<Contato> GetByNameAsync(string nome)
+        public async Task<Contato> GetByNameAsync(string pNome)
         {
-            var contato = await fiapContext.Contatos
+            var contato = await FiapContext.Contatos
                                      .Include(x => x.Telefone)
-                                     .Where(x => x.Nome == nome)
+                                     .Where(x => x.Nome == pNome)
                                      .FirstOrDefaultAsync();
 
             if (contato != null)
                 return contato;
-            throw new WarningException($"Contato com este nome não encontrado");
+            else
+                throw new WarningException($"Contato com este nome não encontrado");
         }
 
         /// <summary>
         /// Checa se o e-mail inserido já foi cadastrado no sistema recebendo o objeto contato como parâmetro
         /// </summary>
-        /// <param name="contato"></param>
+        /// <param name="pContato"></param>
         /// <returns></returns>
         /// <exception cref="WarningException"></exception>
-        public async Task<bool> CheckRegisteredEmail(Contato contato)
+        public async Task<bool> CheckRegisteredEmail(Contato pContato)
         {
             int contatos = CountAsync().Result;
+
             if (contatos > 0)
             {
-                var emailChecker = fiapContext.Contatos.Where(c => c.Email == contato.Email);
-                if(emailChecker.Any())
-                throw new WarningException($"O email inserido já está cadastrado");
+                var emailChecker = FiapContext.Contatos.Where(c => c.Email == pContato.Email);
+
+                if (emailChecker.Any())
+                    throw new WarningException($"O email inserido já está cadastrado");
             }
+
+            await Task.CompletedTask;
+
             return true;
         }
 
         /// <summary>
         /// Faz uma busca os contatos de acordo com o DDD fornecido ou retorna todos os contatos se não informado
         /// </summary>
-        /// <param name="DDD"></param>
+        /// <param name="pDDD"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<IEnumerable<Contato>> GetAllAsync(string? DDD)
+        public async Task<IEnumerable<Contato>> GetAllAsync(string? pDDD)
         {
-            var contatos = await fiapContext.Contatos.Include(x=> x.Telefone).Where(x => DDD == x.Telefone.DDD || DDD == null).ToListAsync();
+            var contatos = await FiapContext.Contatos
+                .Include(x => x.Telefone)
+                .Where(x => pDDD == x.Telefone.DDD || pDDD == null)
+                .ToListAsync();
+
             return contatos;
         }
 
         /// <summary>
         /// Atualiza o contato
         /// </summary>
-        /// <param name="contato"></param>
+        /// <param name="pContatoAtual">Contato atual</param>
+        /// <param name="pContatoAtualizado">Contato com dados atualizados</param>
         /// <returns></returns>
-        public async Task UpdateAsync(Contato currentContato,Contato updatedContato)
+        public async Task UpdateAsync(Contato pContatoAtual, Contato pContatoAtualizado)
         {
-            currentContato.Nome = updatedContato.Nome;
-            currentContato.Email = updatedContato.Email;
-            currentContato.Telefone.DDD = updatedContato.Telefone.DDD;
-            currentContato.Telefone.Numero = updatedContato.Telefone.Numero;
-            
-            fiapContext.Update(currentContato);
-            await fiapContext.SaveChangesAsync();
+            pContatoAtual.Nome = pContatoAtualizado.Nome;
+            pContatoAtual.Email = pContatoAtualizado.Email;
+            pContatoAtual.Telefone.DDD = pContatoAtualizado.Telefone.DDD;
+            pContatoAtual.Telefone.Numero = pContatoAtualizado.Telefone.Numero;
+
+            FiapContext.Update(pContatoAtual);
+            await FiapContext.SaveChangesAsync();
         }
 
         /// <summary>
@@ -138,7 +142,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
         /// <returns></returns>
         public async Task<int> CountAsync()
         {
-            return await fiapContext.Contatos.CountAsync(); // db.CountAsync();
+            return await FiapContext.Contatos.CountAsync();
         }
     }
 }

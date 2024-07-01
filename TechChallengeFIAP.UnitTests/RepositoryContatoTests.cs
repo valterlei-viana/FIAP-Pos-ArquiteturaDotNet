@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using NUnit.Framework;
-using System.Linq;
-using System.Threading.Tasks;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 using TechChallengeFIAP.Infrastracture.Data;
@@ -51,8 +48,8 @@ namespace TechChallengeFIAP.Testes
             var dddServiceMock = new Mock<IDDDRegionService>();
             DDDInfo dddInfoMock = new DDDInfo
             {
-                ddd = "11",
-                state = "SP"
+                DDD = "11",
+                UF = "SP"
             };
 
             dddServiceMock.Setup(x => x.GetInfo("11")).ReturnsAsync(dddInfoMock);
@@ -89,8 +86,8 @@ namespace TechChallengeFIAP.Testes
             var dddServiceMock = new Mock<IDDDRegionService>();
             DDDInfo dddInfoMock = new DDDInfo
             {
-                ddd = "11",
-                state = "SP"
+                DDD = "11",
+                UF = "SP"
             };
 
             dddServiceMock.Setup(x => x.GetInfo("11")).ReturnsAsync(dddInfoMock);
@@ -100,7 +97,7 @@ namespace TechChallengeFIAP.Testes
 
             // Assert
             var contatoAtualizado = await _contatoRepository.FindAsync(currentEntity.Id);
-            Assert.AreEqual("novoemail@fiap.com", contatoAtualizado.Email);
+            Assert.That(contatoAtualizado.Email, Is.EqualTo("novoemail@fiap.com"));
         }
 
         [Test]
@@ -118,8 +115,8 @@ namespace TechChallengeFIAP.Testes
             var dddServiceMock = new Mock<IDDDRegionService>();
             DDDInfo dddInfoMock = new DDDInfo
             {
-                ddd = "11",
-                state = "SP"
+                DDD = "11",
+                UF = "SP"
             };
 
             dddServiceMock.Setup(x => x.GetInfo("11")).ReturnsAsync(dddInfoMock);
@@ -150,8 +147,8 @@ namespace TechChallengeFIAP.Testes
             var dddServiceMock = new Mock<IDDDRegionService>();
             DDDInfo dddInfoMock = new DDDInfo
             {
-                ddd = "11",
-                state = "SP"
+                DDD = "11",
+                UF = "SP"
             };
 
             dddServiceMock.Setup(x => x.GetInfo("11")).ReturnsAsync(dddInfoMock);
@@ -165,7 +162,7 @@ namespace TechChallengeFIAP.Testes
             var count = await _contatoRepository.CountAsync();
 
             // Assert
-            Assert.AreEqual(1, count);
+            Assert.That(count, Is.EqualTo(1));
         }
 
     }
