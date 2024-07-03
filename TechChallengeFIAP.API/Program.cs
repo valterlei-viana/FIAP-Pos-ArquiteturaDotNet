@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Prometheus;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
 using TechChallengeFIAP.API.Middleware;
@@ -37,7 +38,8 @@ ServiceInterfaces.Add(builder.Services);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
+if (app.Environment.IsDevelopment())
+    app.UseDeveloperExceptionPage();
 
 app.UseSwagger();
 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contatos API V1"); });
@@ -97,5 +99,10 @@ app.MapDelete("Deletar/Contato", async (int id, IContatoRepository repository) =
     }
     return Results.NotFound();
 }).WithMetadata(new SwaggerOperationAttribute("Deleta um contato correspondente ao Id recebido como parâmetro"));
+
+
+app.UseRouting();
+app.UseHttpMetrics();
+app.MapMetrics();
 
 app.Run();
