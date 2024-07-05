@@ -29,7 +29,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
             if (emailregistrado)
             {
                 var dddInfo = await DDDService.GetInfo(pContato.Telefone.DDD);
-                pContato.Telefone.UF = dddInfo.UF;
+                pContato.Telefone.UF = dddInfo?.UF;
                 FiapContext.Add(pContato);
             }
             await FiapContext.SaveChangesAsync();
@@ -44,8 +44,12 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
         public async Task DeleteAsync(Contato pContato)
         {
             var contatoDelete = await FindAsync(pContato.Id);
-            FiapContext.Contatos.Remove(contatoDelete);
-            await FiapContext.SaveChangesAsync();
+
+            if (contatoDelete != null)
+            {
+                FiapContext.Contatos.Remove(contatoDelete);
+                await FiapContext.SaveChangesAsync();
+            }
         }
 
 
@@ -55,7 +59,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
         /// <param name="pID"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public async Task<Contato> FindAsync(int pID)
+        public async Task<Contato?> FindAsync(int pID)
         {
             var contato = await FiapContext.Contatos.Include(x => x.Telefone).FirstOrDefaultAsync(x => x.Id == pID);
             return contato;

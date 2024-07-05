@@ -16,7 +16,7 @@ namespace TechChallengeFIAP.Infrastracture.Data
             };
 
             var dddInfo = pDddService.GetInfo("11").Result;
-            testeContato1.Telefone.UF = dddInfo.UF;
+            testeContato1.Telefone.UF = dddInfo?.UF;
             pFiapContext.Add(testeContato1);
 
             var testeContato2 = new Contato
@@ -28,7 +28,7 @@ namespace TechChallengeFIAP.Infrastracture.Data
             };
 
             dddInfo = pDddService.GetInfo("21").Result;
-            testeContato2.Telefone.UF = dddInfo.UF;
+            testeContato2.Telefone.UF = dddInfo?.UF;
             pFiapContext.Add(testeContato2);
             pFiapContext.SaveChanges();
         }

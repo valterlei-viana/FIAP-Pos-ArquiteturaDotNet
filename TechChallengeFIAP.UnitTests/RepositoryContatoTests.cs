@@ -97,7 +97,7 @@ namespace TechChallengeFIAP.Testes
 
             // Assert
             var contatoAtualizado = await _contatoRepository.FindAsync(currentEntity.Id);
-            Assert.That(contatoAtualizado.Email, Is.EqualTo("novoemail@fiap.com"));
+            Assert.That(contatoAtualizado?.Email, Is.EqualTo("novoemail@fiap.com"));
         }
 
         [Test]

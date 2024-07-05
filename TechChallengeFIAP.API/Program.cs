@@ -106,3 +106,6 @@ app.UseHttpMetrics();
 app.MapMetrics();
 
 app.Run();
+
+//Necessario para expor a class Program
+public partial class TechChallengeFIAPAPI { }

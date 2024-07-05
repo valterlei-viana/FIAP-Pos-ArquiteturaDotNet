@@ -16,8 +16,7 @@ namespace TechChallengeFIAP.Infrastructure.Services
         /// </summary>
         /// <param name="pDDD"></param>
         /// <returns></returns>
-        //public static DDDInfo GetInfo(string DDD)
-        public async Task<DDDInfo> GetInfo(string pDDD)
+        public async Task<DDDInfo?> GetInfo(string pDDD)
         {
             if (client.BaseAddress is null)
                 client.BaseAddress = new Uri("https://brasilapi.com.br/api/ddd/v1/");
@@ -30,7 +29,7 @@ namespace TechChallengeFIAP.Infrastructure.Services
             {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
                 var getData = System.Text.Json.JsonSerializer.Deserialize<DDDInfo>(responseContent);
-                getResponse = getData;
+                getResponse = getData ?? getResponse;
             }
             else
             {
