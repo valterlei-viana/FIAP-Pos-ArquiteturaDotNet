@@ -105,7 +105,7 @@ namespace TechChallengeFIAP.IntegrationTests
         }
 
         [Test, Order(6)]
-        public async Task Excluir_Contato()
+        public async Task Deletar_Contato()
         {
             var url = "/Deletar/Contato?id=1";
 
