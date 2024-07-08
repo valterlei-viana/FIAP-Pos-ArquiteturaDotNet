@@ -26,6 +26,7 @@ namespace TechChallengeFIAP.Testes
 
             _contatoRepository = new ContatoRepository(_dbContext, _dddServiceMock.Object);
         }
+
         [TearDown]
         public void TearDown()
         {
@@ -36,7 +37,6 @@ namespace TechChallengeFIAP.Testes
         [Test]
         public async Task AdicionarEntidade_DeveAdicionarNoBancoDeDados()
         {
-            // Arrange
             var entity = new Contato
             {
                 Nome = "Julio",
@@ -164,6 +164,5 @@ namespace TechChallengeFIAP.Testes
             // Assert
             Assert.That(count, Is.EqualTo(1));
         }
-
     }
 }
