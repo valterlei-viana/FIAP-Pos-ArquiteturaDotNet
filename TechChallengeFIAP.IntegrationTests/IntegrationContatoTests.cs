@@ -26,7 +26,7 @@ namespace TechChallengeFIAP.IntegrationTests
             var contato = new Contato()
             {
                 Email = "valterlei.viana@gmail.com",
-                Nome = "Valterlei Mury Viana",
+                Nome = "Valterlei",
                 Telefone = new Telefone()
                 {
                     DDD = "11",
@@ -42,7 +42,7 @@ namespace TechChallengeFIAP.IntegrationTests
         [Test, Order(2)]
         public async Task Buscar_DDD()
         {
-            var url = "/Buscar/DDD/11";
+            var url = "/Buscar/DDD?DDD=11";
 
             var result = await _client.GetAsync(url);
             var contato = await _client.GetFromJsonAsync<IEnumerable<Contato>>(url);
@@ -55,40 +55,62 @@ namespace TechChallengeFIAP.IntegrationTests
         [Test, Order(3)]
         public async Task Buscar_Nome()
         {
-            var url = "/Buscar/Nome/Valterlei";
+            var url = $"/Buscar/Nome?nome=Valterlei";
 
             var result = await _client.GetAsync(url);
-            var contato = await _client.GetFromJsonAsync<IEnumerable<Contato>>(url);
+            var contato = await _client.GetFromJsonAsync<Contato>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.IsNotNull(contato);
-            Assert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
+            Assert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
         }
 
-        [Test, Order(4)]
+        [Test, Order(7)]
         public async Task Buscar_Id()
         {
-            var url = "/Buscar/Id/1";
+            var url = "/Buscar/Id?id=1";
 
             var result = await _client.GetAsync(url);
-            var contato = await _client.GetFromJsonAsync<IEnumerable<Contato>>(url);
 
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.IsNotNull(contato);
-            Assert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test, Order(5)]
         public async Task Atualizar_Contato()
         {
-            var url = "/Atualizar/Contato";
+            var url = "/Atualizar/Contato?id=1";
 
-            var result = await _client.GetAsync(url);
-            var contato = await _client.GetFromJsonAsync<IEnumerable<Contato>>(url);
+            var contato = new Contato()
+            {
+                Email = "valterlei.viana@gmail.com",
+                Nome = "Valterlei - Atualizado",
+                Telefone = new Telefone()
+                {
+                    DDD = "11",
+                    Numero = "994870098"
+                }
+            };
+
+            var result = await _client.PutAsJsonAsync(url, contato);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+
+            url = $"/Buscar/Nome?nome=" + "Valterlei - Atualizado";
+
+            result = await _client.GetAsync(url);
+            contato = await _client.GetFromJsonAsync<Contato>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.IsNotNull(contato);
-            Assert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
+            Assert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
+        }
+
+        [Test, Order(6)]
+        public async Task Excluir_Contato()
+        {
+            var url = "/Deletar/Contato?id=1";
+
+            var result = await _client.DeleteAsync(url);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
     }
 }
