@@ -7,7 +7,7 @@ using TechChallengeFIAP.API.Middleware;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 using TechChallengeFIAP.Infrastracture.Data;
-
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,10 +29,29 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-
 builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "fiap"));
 
 builder.Services.AddHttpClient();
+
+var configuration = builder.Configuration;
+var nomefila = configuration.GetSection("MassTransit")["NomeFila"] ?? string.Empty;
+var servidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
+var usuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
+var senha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(servidor, "/", h =>
+        {
+            h.Username(usuario);
+            h.Password(senha);
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 ServiceInterfaces.Add(builder.Services);
 
@@ -49,6 +68,7 @@ const string baseUrl = @"/v1/contatos";
 app.MapGet("/Buscar/DDD", async (string? DDD, IContatoRepository repository) =>
 {
     var contatos = await repository.GetAllAsync(DDD);
+    
     return (contatos == null || contatos.Count() == 0) ?
         Results.NotFound($"Nenhum Contato Encontrado {(DDD is null ? "" : $"com o DDD {DDD}")}") :
         Results.Ok(contatos);
@@ -66,6 +86,7 @@ app.MapGet("/Buscar/Id", async (int id, IContatoRepository repository)
 app.MapGet("/Buscar/UfPorDDD", async (string DDD, IContatoRepository repository) =>
 {
     var contatos = await repository.GetAllAsync(DDD);
+
     return (contatos == null || contatos.Count() == 0) ?
         Results.NotFound($"Contatos com o DDD: {DDD} não encontrado.") :
         Results.Ok(contatos);
@@ -78,14 +99,18 @@ app.MapPost("Inserir/Contato", async (Contato contato, IContatoRepository reposi
     return Results.Created($"{baseUrl}/{contato.Id}", contato);
 }).WithMetadata(new SwaggerOperationAttribute($"Cria um novo contato, os parâmetros devem corresponder ao body do json, há validações para Id e E-mail repetido"));
 
-app.MapPut("Atualizar/Contato", async (int id, Contato contato, IContatoRepository repository) =>
+app.MapPut("Atualizar/Contato", async (int id, Contato contato, IContatoRepository repository, IBus bus) =>
 {
-    Contato currentContato = await repository.FindAsync(id);
+    Contato? currentContato = await repository.FindAsync(id);
+    
     if (currentContato != null)
     {
-        await repository.UpdateAsync(currentContato, contato);
+        var endpoint = await bus.GetSendEndpoint(new Uri($"queue:{nomefila}"));
+        await endpoint.Send(contato);
+        //await repository.UpdateAsync(currentContato, contato);
         return Results.Ok($"Registro(s) atualizado(s) com sucesso!");
     }
+
     return Results.NotFound($"Contato ID {id} não localizado.");
 
 }).WithMetadata(new SwaggerOperationAttribute("Atualiza um contato existente"));
@@ -97,6 +122,7 @@ app.MapDelete("Deletar/Contato", async (int id, IContatoRepository repository) =
         await repository.DeleteAsync(contato);
         return Results.Ok($"Registro excluído com sucesso!");
     }
+
     return Results.NotFound();
 }).WithMetadata(new SwaggerOperationAttribute("Deleta um contato correspondente ao Id recebido como parâmetro"));
 
