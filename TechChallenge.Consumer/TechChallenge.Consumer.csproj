@@ -4,7 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-TechCallengeFIAP.WS.Update-87d7a402-9612-453a-a8ec-4da7f40743cb</UserSecretsId>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <PublishAot>false</PublishAot>
+    <UserSecretsId>dotnet-TechChallenge.Consumer-52b27f50-178d-4f24-b90e-e26cc576f340</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
