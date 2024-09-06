@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrometheusGrafana", "Promet
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallengeFIAP.IntegrationTests", "TechChallengeFIAP.IntegrationTests\TechChallengeFIAP.IntegrationTests.csproj", "{BA3E996B-87BB-47F9-B484-FEA162E97A69}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallenge.Consumer", "TechChallenge.Consumer\TechChallenge.Consumer.csproj", "{512BBD28-E679-41B0-B3F6-3F0FA85D271F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallengeFIAP.Consumer", "TechChallengeFIAP.Consumer\TechChallengeFIAP.Consumer.csproj", "{6C717A58-88DF-4E1A-B95D-49ECC023541E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +52,10 @@ Global
 		{BA3E996B-87BB-47F9-B484-FEA162E97A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA3E996B-87BB-47F9-B484-FEA162E97A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA3E996B-87BB-47F9-B484-FEA162E97A69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{512BBD28-E679-41B0-B3F6-3F0FA85D271F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{512BBD28-E679-41B0-B3F6-3F0FA85D271F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{512BBD28-E679-41B0-B3F6-3F0FA85D271F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{512BBD28-E679-41B0-B3F6-3F0FA85D271F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C717A58-88DF-4E1A-B95D-49ECC023541E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C717A58-88DF-4E1A-B95D-49ECC023541E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C717A58-88DF-4E1A-B95D-49ECC023541E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C717A58-88DF-4E1A-B95D-49ECC023541E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
