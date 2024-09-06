@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using TechChallengeFIAP.Core.Entities;
+using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace TechChallengeFIAP.IntegrationTests
 {
@@ -48,8 +50,8 @@ namespace TechChallengeFIAP.IntegrationTests
             var contato = await _client.GetFromJsonAsync<IEnumerable<Contato>>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.IsNotNull(contato);
-            Assert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
+            ClassicAssert.IsNotNull(contato);
+            ClassicAssert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
         }
 
         [Test, Order(3)]
@@ -61,8 +63,8 @@ namespace TechChallengeFIAP.IntegrationTests
             var contato = await _client.GetFromJsonAsync<Contato>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.IsNotNull(contato);
-            Assert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
+            ClassicAssert.IsNotNull(contato);
+            ClassicAssert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
         }
 
         [Test, Order(7)]
@@ -100,8 +102,8 @@ namespace TechChallengeFIAP.IntegrationTests
             contato = await _client.GetFromJsonAsync<Contato>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.IsNotNull(contato);
-            Assert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
+            ClassicAssert.IsNotNull(contato);
+            ClassicAssert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
         }
 
         [Test, Order(6)]

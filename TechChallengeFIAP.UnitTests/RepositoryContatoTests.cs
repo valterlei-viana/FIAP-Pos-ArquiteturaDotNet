@@ -4,6 +4,7 @@ using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 using TechChallengeFIAP.Infrastracture.Data;
 using TechChallengeFIAP.Infrastructure.Repositories;
+using NUnit.Framework.Legacy;
 
 namespace TechChallengeFIAP.Testes
 {
@@ -60,7 +61,7 @@ namespace TechChallengeFIAP.Testes
 
             // Assert
             var contatos = await _contatoRepository.GetAllAsync(null);
-            Assert.IsTrue(contatos.Any(c => c.Nome == "Julio"));
+            Assert.That(contatos.Any(c => c.Nome == "Julio"));
         }
 
 
@@ -129,7 +130,7 @@ namespace TechChallengeFIAP.Testes
 
             // Assert
             var contatos = await _contatoRepository.GetAllAsync(null);
-            Assert.IsFalse(contatos.Any(c => c.Nome == "Gustavo"));
+            ClassicAssert.IsFalse(contatos.Any(c => c.Nome == "Gustavo"));
         }
 
         [Test]
