@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using NUnit.Framework.Legacy;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
-using TechChallengeFIAP.Infrastracture.Data;
+using TechChallengeFIAP.Infrastructure.Data;
 using TechChallengeFIAP.Infrastructure.Repositories;
-using NUnit.Framework.Legacy;
 
-namespace TechChallengeFIAP.Testes
+namespace TechChallengeFIAP.UnitTests
 {
     [TestFixture]
     public class RepositoryContatoTestes

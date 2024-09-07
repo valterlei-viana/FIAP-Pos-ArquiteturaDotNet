@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Prometheus;
@@ -5,11 +6,16 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
-using TechChallengeFIAP.Infrastracture.Data;
-using MassTransit;
+using TechChallengeFIAP.Infrastructure.Data;
 using TechChallengeFIAP.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration;
+var mTservidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
+var mTusuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
+var mTsenha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
+var sqliteConnectionString = configuration.GetSection("ConexaoSqlite")["SqliteConnectionString"] ?? string.Empty;
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -29,21 +35,16 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "fiap"));
-
-var configuration = builder.Configuration;
-var servidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
-var usuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
-var senha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
+builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseSqlite(sqliteConnectionString));
 
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(servidor, "/", h =>
+        cfg.Host(mTservidor, "/", h =>
         {
-            h.Username(usuario);
-            h.Password(senha);
+            h.Username(mTusuario);
+            h.Password(mTsenha);
         });
 
         cfg.ConfigureEndpoints(context);
@@ -65,7 +66,7 @@ const string baseUrl = @"/v1/contatos";
 app.MapGet("Contato/Buscar/DDD", async (string? DDD, IContatoRepository repository) =>
 {
     var contatos = await repository.GetAllAsync(DDD);
-    
+
     return (contatos == null || contatos.Count() == 0) ?
         Results.NotFound($"Nenhum Contato Encontrado {(DDD is null ? "" : $"com o DDD {DDD}")}") :
         Results.Ok(contatos);
@@ -96,10 +97,10 @@ app.MapPost("Contato/Inserir", async (Contato contato, IContatoRepository reposi
     return Results.Created($"{baseUrl}/{contato.Id}", contato);
 }).WithMetadata(new SwaggerOperationAttribute($"Cria um novo contato, os parâmetros devem corresponder ao body do json, há validações para Id e E-mail repetido"));
 
-app.MapPut("Contato/Atualizar", async (int id, Contato contato, IContatoRepository repository, IBus bus) =>
+app.MapPut("Contato/Atualizar", async (Contato contato, IContatoRepository repository, IBus bus) =>
 {
-    Contato? currentContato = await repository.FindAsync(id);
-    
+    Contato? currentContato = await repository.FindAsync(contato.Id);
+
     if (currentContato != null)
     {
         var endpoint = await bus.GetSendEndpoint(new Uri($"queue:Contato-Atualizar"));
@@ -107,7 +108,7 @@ app.MapPut("Contato/Atualizar", async (int id, Contato contato, IContatoReposito
         return Results.Ok($"Registro(s) atualizado(s) com sucesso!");
     }
 
-    return Results.NotFound($"Contato ID {id} não localizado.");
+    return Results.NotFound($"Contato ID {contato.Id} não localizado.");
 
 }).WithMetadata(new SwaggerOperationAttribute("Atualiza um contato existente"));
 

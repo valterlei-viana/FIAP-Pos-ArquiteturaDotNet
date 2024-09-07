@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TechChallengeFIAP.Core.Entities;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace TechChallengeFIAP.Infrastracture.Data
+namespace TechChallengeFIAP.Infrastructure.Data
 {
     public class FiapDbContext : DbContext
     {
@@ -15,6 +17,15 @@ namespace TechChallengeFIAP.Infrastracture.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseSqlite(b => b.MigrationsAssembly("TechChallengeFIAP.API"));
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Contato>().HasKey(m => m.Id);
+            builder.Entity<Telefone>().HasKey(m => m.Id);
+
+            base.OnModelCreating(builder);
         }
     }
 }

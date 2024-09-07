@@ -1,9 +1,8 @@
 
+using NUnit.Framework.Legacy;
 using System.Net;
 using System.Net.Http.Json;
 using TechChallengeFIAP.Core.Entities;
-using NUnit.Framework;
-using NUnit.Framework.Legacy;
 
 namespace TechChallengeFIAP.IntegrationTests
 {

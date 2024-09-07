@@ -1,7 +1,7 @@
 ﻿using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 
-namespace TechChallengeFIAP.Infrastracture.Data
+namespace TechChallengeFIAP.Infrastructure.Data
 {
     public static class SeedTest
     {

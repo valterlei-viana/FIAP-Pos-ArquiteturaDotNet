@@ -7,6 +7,6 @@ namespace TechChallengeFIAP.Core.Entities
 
         [Key]
         public int Id { get; set; }
-        
+
     }
 }

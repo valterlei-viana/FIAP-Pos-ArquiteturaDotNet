@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
-using TechChallengeFIAP.Infrastracture.Data;
+using TechChallengeFIAP.Infrastructure.Data;
 
 namespace TechChallengeFIAP.Infrastructure.Repositories
 {

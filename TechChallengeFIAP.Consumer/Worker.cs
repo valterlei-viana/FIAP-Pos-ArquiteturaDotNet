@@ -1,4 +1,4 @@
-namespace TechChallenge.Consumer
+namespace TechChallengeFIAP.Consumer
 {
     public class Worker : BackgroundService
     {

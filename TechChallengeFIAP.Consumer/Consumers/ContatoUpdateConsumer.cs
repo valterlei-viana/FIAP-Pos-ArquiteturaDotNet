@@ -2,7 +2,7 @@
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 
-namespace TechChallenge.Consumer.Events
+namespace TechChallengeFIAP.Consumer.Consumers
 {
     public class ContatoAtualizarConsumer : IConsumer<Contato>
     {

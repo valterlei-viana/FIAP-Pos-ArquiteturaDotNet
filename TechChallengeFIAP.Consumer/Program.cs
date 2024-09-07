@@ -1,20 +1,19 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using TechChallenge.Consumer;
-using TechChallenge.Consumer.Events;
-using TechChallengeFIAP.Core.Interfaces;
-using TechChallengeFIAP.Infrastracture.Data;
+using TechChallengeFIAP.Consumer;
+using TechChallengeFIAP.Consumer.Consumers;
+using TechChallengeFIAP.Infrastructure.Data;
 using TechChallengeFIAP.Infrastructure.Middleware;
-using TechChallengeFIAP.Infrastructure.Repositories;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 var configuration = builder.Configuration;
-var servidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
-var usuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
-var senha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
+var mTservidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
+var mTusuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
+var mTsenha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
+var sqliteConnectionString = configuration.GetSection("ConexaoSqlite")["SqliteConnectionString"] ?? string.Empty;
 
-builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "fiap"));
+builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseSqlite(sqliteConnectionString));
 
 ServiceInterfaces.Add(builder.Services);
 
@@ -24,10 +23,10 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(servidor, "/", h =>
+        cfg.Host(mTservidor, "/", h =>
         {
-            h.Username(usuario);
-            h.Password(senha);
+            h.Username(mTusuario);
+            h.Password(mTsenha);
         });
 
         cfg.ReceiveEndpoint("Contato-Atualizar", e =>
