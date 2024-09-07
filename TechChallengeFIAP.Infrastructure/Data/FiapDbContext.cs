@@ -17,7 +17,8 @@ namespace TechChallengeFIAP.Infrastructure.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(b => b.MigrationsAssembly("TechChallengeFIAP.API"));
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlite(b => b.MigrationsAssembly("TechChallengeFIAP.API"));
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
