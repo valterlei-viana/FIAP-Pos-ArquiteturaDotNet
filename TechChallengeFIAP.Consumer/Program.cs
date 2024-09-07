@@ -19,7 +19,9 @@ ServiceInterfaces.Add(builder.Services);
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<ContatoInserirConsumer>();
     x.AddConsumer<ContatoAtualizarConsumer>();
+    x.AddConsumer<ContatoExcluirConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -29,9 +31,19 @@ builder.Services.AddMassTransit(x =>
             h.Password(mTsenha);
         });
 
+        cfg.ReceiveEndpoint("Contato-Inserir", e =>
+        {
+            e.ConfigureConsumer<ContatoInserirConsumer>(context);
+        });
+
         cfg.ReceiveEndpoint("Contato-Atualizar", e =>
         {
             e.ConfigureConsumer<ContatoAtualizarConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("Contato-Excluir", e =>
+        {
+            e.ConfigureConsumer<ContatoExcluirConsumer>(context);
         });
 
         cfg.ConfigureEndpoints(context);

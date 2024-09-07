@@ -63,6 +63,16 @@ app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contatos 
 
 const string baseUrl = @"/v1/contatos";
 
+app.MapGet("Contato/BuscarTodos", async (IContatoRepository repository) =>
+{
+    var contatos = await repository.GetAllAsync(null);
+
+    return (contatos == null || contatos.Count() == 0) ?
+        Results.NotFound($"Nenhum Contato Encontrado.") :
+        Results.Ok(contatos);
+})
+.WithMetadata(new SwaggerOperationAttribute("Retorna todos os contatos."));
+
 app.MapGet("Contato/Buscar/DDD", async (string? DDD, IContatoRepository repository) =>
 {
     var contatos = await repository.GetAllAsync(DDD);
@@ -91,9 +101,10 @@ app.MapGet("Uf/Buscar/DDD", async (string DDD, IContatoRepository repository) =>
 
 }).WithMetadata(new SwaggerOperationAttribute("Retorna o estado correspondente ao DDD recebido como parâmetro"));
 
-app.MapPost("Contato/Inserir", async (Contato contato, IContatoRepository repository) =>
+app.MapPost("Contato/Inserir", async (Contato contato, IContatoRepository repository, IBus bus) =>
 {
-    await repository.AddAsync(contato);
+    var endpoint = await bus.GetSendEndpoint(new Uri($"queue:Contato-Inserir"));
+    await endpoint.Send(contato);
     return Results.Created($"{baseUrl}/{contato.Id}", contato);
 }).WithMetadata(new SwaggerOperationAttribute($"Cria um novo contato, os parâmetros devem corresponder ao body do json, há validações para Id e E-mail repetido"));
 
@@ -112,16 +123,17 @@ app.MapPut("Contato/Atualizar", async (Contato contato, IContatoRepository repos
 
 }).WithMetadata(new SwaggerOperationAttribute("Atualiza um contato existente"));
 
-app.MapDelete("Contato/Deletar", async (int id, IContatoRepository repository) =>
+app.MapDelete("Contato/Excluir", async (int id, IContatoRepository repository, IBus bus) =>
 {
     if (await repository.FindAsync(id) is Contato contato)
     {
-        await repository.DeleteAsync(contato);
+        var endpoint = await bus.GetSendEndpoint(new Uri($"queue:Contato-Excluir"));
+        await endpoint.Send(contato);
         return Results.Ok($"Registro excluído com sucesso!");
     }
 
     return Results.NotFound();
-}).WithMetadata(new SwaggerOperationAttribute("Deleta um contato correspondente ao Id recebido como parâmetro"));
+}).WithMetadata(new SwaggerOperationAttribute("Excluir um contato correspondente ao Id recebido como parâmetro"));
 
 
 app.UseRouting();
