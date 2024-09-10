@@ -20,9 +20,19 @@ namespace TechChallengeFIAP.IntegrationTests
         }
 
         [SetUp]
-        public void Setup() => _clientAPI = _FIAPAPI.CreateClient();
+        public void Setup()
+        {
+            _clientAPI = _FIAPAPI.CreateClient();
+            _FIAPConsumer?.Server?.Host?.StartAsync();
+        }
 
-        public void Dispose() => _FIAPAPI?.Dispose();
+        public void Dispose()
+        {
+            _FIAPConsumer.Server.Host.StopAsync();
+            _FIAPAPI?.Dispose();
+            _clientAPI?.Dispose();
+            _FIAPConsumer?.Dispose();
+        }
 
         [Test, Order(1)]
         public async Task Inserir_Contato()
