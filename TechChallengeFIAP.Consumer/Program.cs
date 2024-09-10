@@ -55,3 +55,7 @@ builder.Services.AddHostedService<Worker>();
 var host = builder.Build();
 
 host.Run();
+
+//Necessario para expor a class Program
+public partial class TechChallengeFIAPConsumer { }
+

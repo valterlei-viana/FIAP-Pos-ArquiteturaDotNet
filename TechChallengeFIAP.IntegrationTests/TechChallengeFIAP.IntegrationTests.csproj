@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TechChallengeFIAP.API\TechChallengeFIAP.API.csproj" />
+    <ProjectReference Include="..\TechChallengeFIAP.Consumer\TechChallengeFIAP.Consumer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
