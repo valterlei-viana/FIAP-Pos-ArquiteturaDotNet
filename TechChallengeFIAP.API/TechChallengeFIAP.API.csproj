@@ -41,6 +41,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\TechChallengeFIAP.Consumer\TechChallengeFIAP.Consumer.csproj" />
 		<ProjectReference Include="..\TechChallengeFIAP.Infrastructure\TechChallengeFIAP.Infrastructure.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,11 +1,13 @@
 using MassTransit;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using TechChallengeFIAP.Consumer;
 using TechChallengeFIAP.Consumer.Consumers;
 using TechChallengeFIAP.Infrastructure.Data;
 using TechChallengeFIAP.Infrastructure.Middleware;
 
-var builder = Host.CreateApplicationBuilder(args);
+//var builder = Host.CreateApplicationBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 var mTservidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
@@ -58,4 +60,3 @@ host.Run();
 
 //Necessario para expor a class Program
 public partial class TechChallengeFIAPConsumer { }
-

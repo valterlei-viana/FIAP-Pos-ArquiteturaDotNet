@@ -8,12 +8,5 @@ namespace TechChallengeFIAP.IntegrationTests
 {
     public class IntegrationTestTechChallengeFIAPAPI : WebApplicationFactory<TechChallengeFIAPAPI>
     {
-        //protected override void ConfigureWebHost(IWebHostBuilder builder)
-        //{
-        //    builder.ConfigureServices(services =>
-        //    {
-        //        //services.AddDbContext<FiapDbContext>(opt => opt.UseSqlite(sqliteConnectionString));
-        //    });
-        //}
     }
 }

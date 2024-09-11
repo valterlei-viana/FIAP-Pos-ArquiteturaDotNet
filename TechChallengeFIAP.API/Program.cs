@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Prometheus;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
+using TechChallengeFIAP.Consumer;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 using TechChallengeFIAP.Infrastructure.Data;

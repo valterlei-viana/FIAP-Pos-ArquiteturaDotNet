@@ -1,4 +1,7 @@
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using NUnit.Framework.Legacy;
 using System.Net;
 using System.Net.Http.Json;
@@ -17,21 +20,20 @@ namespace TechChallengeFIAP.IntegrationTests
         {
             _FIAPAPI = new IntegrationTestTechChallengeFIAPAPI();
             _FIAPConsumer = new IntegrationTestTechChallengeFIAPConsumer();
+            _FIAPConsumer.RunHostAsync();
         }
 
         [SetUp]
         public void Setup()
         {
             _clientAPI = _FIAPAPI.CreateClient();
-            _FIAPConsumer?.Server?.Host?.StartAsync();
         }
 
         public void Dispose()
         {
-            _FIAPConsumer.Server.Host.StopAsync();
+            _FIAPConsumer?.Dispose();
             _FIAPAPI?.Dispose();
             _clientAPI?.Dispose();
-            _FIAPConsumer?.Dispose();
         }
 
         [Test, Order(1)]
@@ -41,8 +43,8 @@ namespace TechChallengeFIAP.IntegrationTests
 
             var contato = new Contato()
             {
-                Email = "valterlei.test@gmail.com",
-                Nome = "Valterlei Test",
+                Email = "valterlei.viana@gmail.com",
+                Nome = "Valterlei",
                 Telefone = new Telefone()
                 {
                     DDD = "99",
@@ -65,20 +67,20 @@ namespace TechChallengeFIAP.IntegrationTests
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             ClassicAssert.IsNotNull(contato);
-            ClassicAssert.IsTrue(contato.First().Email == "valterlei.test@gmail.com");
+            ClassicAssert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
         }
 
         [Test, Order(3)]
         public async Task Buscar_Nome()
         {
-            var url = $"/Contato/Buscar/Nome?nome=Valterlei Test";
+            var url = $"/Contato/Buscar/Nome?nome=Valterlei";
 
             var result = await _clientAPI.GetAsync(url);
             var contato = await _clientAPI.GetFromJsonAsync<Contato>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             ClassicAssert.IsNotNull(contato);
-            ClassicAssert.IsTrue(contato.Email == "valterlei.test@gmail.com");
+            ClassicAssert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
         }
 
         [Test, Order(7)]
