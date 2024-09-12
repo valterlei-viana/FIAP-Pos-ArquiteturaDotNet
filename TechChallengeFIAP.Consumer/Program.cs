@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using TechChallengeFIAP.Consumer;
 using TechChallengeFIAP.Consumer.Consumers;
+using TechChallengeFIAP.Core.Interfaces;
 using TechChallengeFIAP.Infrastructure.Data;
 using TechChallengeFIAP.Infrastructure.Middleware;
 

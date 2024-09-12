@@ -15,11 +15,18 @@ namespace TechChallengeFIAP.Consumer.Consumers
 
         public async Task Consume(ConsumeContext<Contato> context)
         {
-            Console.WriteLine(context.Message);
+            try
+            {
+                Console.WriteLine(context.Message);
 
-            await _contatoRepository.AddAsync(context.Message);
+                await _contatoRepository.AddAsync(context.Message);
 
-            await Task.CompletedTask;
+                await Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }

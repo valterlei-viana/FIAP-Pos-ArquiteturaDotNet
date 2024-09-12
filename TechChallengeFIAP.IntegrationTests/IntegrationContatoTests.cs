@@ -15,26 +15,27 @@ namespace TechChallengeFIAP.IntegrationTests
         private IntegrationTestTechChallengeFIAPConsumer _FIAPConsumer;
         private HttpClient _clientAPI, _clientConsumer;
 
+
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             _FIAPAPI = new IntegrationTestTechChallengeFIAPAPI();
-            //_FIAPConsumer = new IntegrationTestTechChallengeFIAPConsumer();
-            //_clientConsumer = _FIAPConsumer.CreateClient();
-            _clientAPI = _FIAPAPI.CreateClient();
+            _FIAPConsumer = new IntegrationTestTechChallengeFIAPConsumer();
         }
 
         [SetUp]
         public void Setup()
         {
+            _clientConsumer = _FIAPConsumer.CreateClient();
+            _clientAPI = _FIAPAPI.CreateClient();
         }
 
         public void Dispose()
         {
-            _FIAPConsumer?.Dispose();
+            //_FIAPConsumer?.Dispose();
             _FIAPAPI?.Dispose();
             _clientAPI?.Dispose();
-            _clientConsumer?.Dispose();
+            //_clientConsumer?.Dispose();
         }
 
         //[Test, Order(1)]
@@ -44,12 +45,13 @@ namespace TechChallengeFIAP.IntegrationTests
 
         //    var contato = new Contato()
         //    {
-        //        Email = "valterlei.viana@gmail.com",
-        //        Nome = "Valterlei",
+        //        Email = "teste13@gmail.com",
+        //        Nome = "teste",
         //        Telefone = new Telefone()
         //        {
-        //            DDD = "99",
-        //            Numero = "994870098"
+        //            DDD = "11",
+        //            Numero = "994870098",
+        //            UF = "SP"
         //        }
         //    };
 
@@ -58,18 +60,18 @@ namespace TechChallengeFIAP.IntegrationTests
         //}
 
 
-        //[Test, Order(2)]
-        //public async Task Buscar_DDD()
-        //{
-        //    var url = "/Contato/Buscar/DDD?DDD=99";
+        [Test, Order(2)]
+        public async Task Buscar_DDD()
+        {
+            var url = "/Contato/Buscar/DDD?DDD=99";
 
-        //    var result = await _clientAPI.GetAsync(url);
-        //    var contato = await _clientAPI.GetFromJsonAsync<IEnumerable<Contato>>(url);
+            var result = await _clientAPI.GetAsync(url);
+            var contato = await _clientAPI.GetFromJsonAsync<IEnumerable<Contato>>(url);
 
-        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        //    ClassicAssert.IsNotNull(contato);
-        //    ClassicAssert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
-        //}
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            ClassicAssert.IsNotNull(contato);
+            ClassicAssert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
+        }
 
         //[Test, Order(3)]
         //public async Task Buscar_Nome()
@@ -84,15 +86,15 @@ namespace TechChallengeFIAP.IntegrationTests
         //    ClassicAssert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
         //}
 
-        [Test, Order(7)]
-        public async Task Buscar_Id()
-        {
-            var url = "Contato/Buscar/Id?id=1";
+        //[Test, Order(7)]
+        //public async Task Buscar_Id()
+        //{
+        //    var url = "Contato/Buscar/Id?id=4";
 
-            var result = await _clientAPI.GetAsync(url);
+        //    var result = await _clientAPI.GetAsync(url);
 
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-        }
+        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        //}
 
         //[Test, Order(5)]
         //public async Task Atualizar_Contato()
