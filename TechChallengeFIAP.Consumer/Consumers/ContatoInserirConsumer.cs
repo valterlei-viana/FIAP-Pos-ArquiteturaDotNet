@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using System.Diagnostics;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 
@@ -25,7 +26,7 @@ namespace TechChallengeFIAP.Consumer.Consumers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Debug.WriteLine(ex.ToString());
             }
         }
     }

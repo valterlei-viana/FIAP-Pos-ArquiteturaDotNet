@@ -26,39 +26,38 @@ namespace TechChallengeFIAP.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _clientConsumer = _FIAPConsumer.CreateClient();
             _clientAPI = _FIAPAPI.CreateClient();
         }
 
         public void Dispose()
         {
-            //_FIAPConsumer?.Dispose();
+            _FIAPConsumer?.Dispose();
             _FIAPAPI?.Dispose();
             _clientAPI?.Dispose();
-            //_clientConsumer?.Dispose();
+            _clientConsumer?.Dispose();
         }
 
-        //[Test, Order(1)]
-        //public async Task Inserir_Contato()
-        //{
-        //    var url = "/Contato/Inserir";
+        [Test, Order(1)]
+        public async Task Inserir_Contato()
+        {
+            var url = "/Contato/Inserir";
 
-        //    var contato = new Contato()
-        //    {
-        //        Email = "teste13@gmail.com",
-        //        Nome = "teste",
-        //        Telefone = new Telefone()
-        //        {
-        //            DDD = "11",
-        //            Numero = "994870098",
-        //            UF = "SP"
-        //        }
-        //    };
+            var contato = new Contato()
+            {
+                Email = "teste44@gmail.com",
+                Nome = "teste",
+                Telefone = new Telefone()
+                {
+                    DDD = "11",
+                    Numero = "994870098",
+                    UF = "SP"
+                }
+            };
 
-        //    var result = await _clientAPI.PostAsJsonAsync(url, contato);
-        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-        //}
-
+            var result = await _clientAPI.PostAsJsonAsync(url, contato);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+            _clientConsumer = _FIAPConsumer.CreateClient();
+        }
 
         [Test, Order(2)]
         public async Task Buscar_DDD()
