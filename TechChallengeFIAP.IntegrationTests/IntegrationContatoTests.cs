@@ -1,7 +1,3 @@
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using NUnit.Framework.Legacy;
 using System.Net;
 using System.Net.Http.Json;
@@ -11,30 +7,39 @@ namespace TechChallengeFIAP.IntegrationTests
 {
     public class ApiIntegrationTests : IDisposable
     {
-        private IntegrationTestTechChallengeFIAPAPI _FIAPAPI;
-        private IntegrationTestTechChallengeFIAPConsumer _FIAPConsumer;
-        private HttpClient _clientAPI, _clientConsumer;
-
+        private IntegrationTestTechChallengeFIAPAPI FIAPAPI;
+        private IntegrationTestTechChallengeFIAPConsumer FIAPConsumer;
+        private HttpClient clientAPI, clientConsumer;
+        private int id;
+        private string guid = Guid.NewGuid().ToString();
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            _FIAPAPI = new IntegrationTestTechChallengeFIAPAPI();
-            _FIAPConsumer = new IntegrationTestTechChallengeFIAPConsumer();
+            FIAPAPI = new IntegrationTestTechChallengeFIAPAPI();
+            FIAPConsumer = new IntegrationTestTechChallengeFIAPConsumer();
+            clientConsumer = FIAPConsumer.CreateClient();
         }
 
         [SetUp]
         public void Setup()
         {
-            _clientAPI = _FIAPAPI.CreateClient();
+            clientAPI = FIAPAPI.CreateClient();
+        }
+
+        [TearDown]
+        public async Task Teardown()
+        {
+            clientConsumer = FIAPConsumer.CreateClient();
+            await Task.Delay(1000);
         }
 
         public void Dispose()
         {
-            _FIAPConsumer?.Dispose();
-            _FIAPAPI?.Dispose();
-            _clientAPI?.Dispose();
-            _clientConsumer?.Dispose();
+            FIAPConsumer?.Dispose();
+            FIAPAPI?.Dispose();
+            clientAPI?.Dispose();
+            clientConsumer?.Dispose();
         }
 
         [Test, Order(1)]
@@ -44,93 +49,94 @@ namespace TechChallengeFIAP.IntegrationTests
 
             var contato = new Contato()
             {
-                Email = "teste44@gmail.com",
-                Nome = "teste",
+                Email = $"{guid}@gmail.com",
+                Nome = guid,
                 Telefone = new Telefone()
                 {
                     DDD = "11",
-                    Numero = "994870098",
+                    Numero = "955778899",
                     UF = "SP"
                 }
             };
 
-            var result = await _clientAPI.PostAsJsonAsync(url, contato);
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-            _clientConsumer = _FIAPConsumer.CreateClient();
+            var result = await clientAPI.PostAsJsonAsync(url, contato);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));            
         }
 
         [Test, Order(2)]
         public async Task Buscar_DDD()
         {
-            var url = "/Contato/Buscar/DDD?DDD=99";
+            var url = "/Contato/Buscar/DDD?DDD=11";
 
-            var result = await _clientAPI.GetAsync(url);
-            var contato = await _clientAPI.GetFromJsonAsync<IEnumerable<Contato>>(url);
+            var result = await clientAPI.GetAsync(url);
+            var contatos = await clientAPI.GetFromJsonAsync<IEnumerable<Contato>>(url);
+
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            ClassicAssert.IsNotNull(contatos);
+            ClassicAssert.IsTrue(contatos.Where(x => x.Nome == guid).Single() != null);
+        }
+
+        [Test, Order(3)]
+        public async Task Buscar_Nome()
+        {
+            var url = $"/Contato/Buscar/Nome?nome={guid}";
+
+            var result = await clientAPI.GetAsync(url);
+            var contato = await clientAPI.GetFromJsonAsync<Contato>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             ClassicAssert.IsNotNull(contato);
-            ClassicAssert.IsTrue(contato.First().Email == "valterlei.viana@gmail.com");
+            ClassicAssert.IsTrue(contato.Email == $"{guid}@gmail.com");
+            id = contato.Id;
         }
 
-        //[Test, Order(3)]
-        //public async Task Buscar_Nome()
-        //{
-        //    var url = $"/Contato/Buscar/Nome?nome=Valterlei";
+        [Test, Order(7)]
+        public async Task Buscar_Id()
+        {
+            var url = $"Contato/Buscar/Id?id={id.ToString()}";
 
-        //    var result = await _clientAPI.GetAsync(url);
-        //    var contato = await _clientAPI.GetFromJsonAsync<Contato>(url);
+            var result = await clientAPI.GetAsync(url);
 
-        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        //    ClassicAssert.IsNotNull(contato);
-        //    ClassicAssert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
-        //}
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+        }
 
-        //[Test, Order(7)]
-        //public async Task Buscar_Id()
-        //{
-        //    var url = "Contato/Buscar/Id?id=4";
+        [Test, Order(5)]
+        public async Task Atualizar_Contato()
+        {
+            var url = "/Contato/Atualizar";
 
-        //    var result = await _clientAPI.GetAsync(url);
+            var contato = new Contato()
+            {
+                Id = id,
+                Email = $"{guid}@gmail.com",
+                Nome = $"{guid} - Atualizado",
+                Telefone = new Telefone()
+                {
+                    DDD = "11",
+                    Numero = "912345678"
+                }
+            };
 
-        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-        //}
+            var result = await clientAPI.PutAsJsonAsync(url, contato);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-        //[Test, Order(5)]
-        //public async Task Atualizar_Contato()
-        //{
-        //    var url = "/Contato/Atualizar";
+            url = $"Contato/Buscar/Id?id={id.ToString()}";
 
-        //    var contato = new Contato()
-        //    {
-        //        Email = "valterlei.test@gmail.com",
-        //        Nome = "Valterlei - Atualizado",
-        //        Telefone = new Telefone()
-        //        {
-        //            DDD = "99",
-        //            Numero = "994870098"
-        //        }
-        //    };
+            result = await clientAPI.GetAsync(url);
+            contato = await clientAPI.GetFromJsonAsync<Contato>(url);
 
-        //    var result = await _clientAPI.PutAsJsonAsync(url, contato);
-        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            ClassicAssert.IsNotNull(contato);
+            ClassicAssert.IsTrue(contato.Nome == $"{guid} - Atualizado");
+        }
 
-        //    url = $"/Contato/Buscar/Nome?nome=" + "Valterlei - Atualizado";
+        [Test, Order(6)]
+        public async Task Excluir_Contato()
+        {
+            var url = $"/Contato/Excluir?id={id.ToString()}";
 
-        //    result = await _clientAPI.GetAsync(url);
-        //    contato = await _clientAPI.GetFromJsonAsync<Contato>(url);
-
-        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        //    ClassicAssert.IsNotNull(contato);
-        //    ClassicAssert.IsTrue(contato.Email == "valterlei.viana@gmail.com");
-        //}
-
-        //[Test, Order(6)]
-        //public async Task Excluir_Contato()
-        //{
-        //    var url = "/Contato/Excluir?id=1";
-
-        //    var result = await _clientAPI.DeleteAsync(url);
-        //    Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        //}
+            var result = await clientAPI.DeleteAsync(url);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        }
     }
 }
