@@ -8,13 +8,13 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
 {
     public class ContatoRepository : IContatoRepository
     {
-        private FiapDbContext FiapContext;
-        private IDDDRegionService DDDService;
+        private FiapDbContext _FiapContext;
+        private IDDDRegionService _DDDService;
 
         public ContatoRepository(FiapDbContext pFiapContext, IDDDRegionService pDDDService)
         {
-            DDDService = pDDDService;
-            FiapContext = pFiapContext;
+            _DDDService = pDDDService;
+            _FiapContext = pFiapContext;
         }
 
         /// <summary>
@@ -28,11 +28,11 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
 
             if (emailregistrado)
             {
-                var dddInfo = await DDDService.GetInfo(pContato.Telefone.DDD);
+                var dddInfo = await _DDDService.GetInfo(pContato.Telefone.DDD);
                 pContato.Telefone.UF = dddInfo?.UF;
-                FiapContext.Add(pContato);
+                _FiapContext.Add(pContato);
             }
-            await FiapContext.SaveChangesAsync();
+            await _FiapContext.SaveChangesAsync();
             return pContato;
         }
 
@@ -47,8 +47,8 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
 
             if (contatoDelete != null)
             {
-                FiapContext.Contatos.Remove(contatoDelete);
-                await FiapContext.SaveChangesAsync();
+                _FiapContext.Contatos.Remove(contatoDelete);
+                await _FiapContext.SaveChangesAsync();
             }
         }
 
@@ -61,7 +61,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
         /// <exception cref="InvalidOperationException"></exception>
         public async Task<Contato?> FindAsync(int pID)
         {
-            var contato = await FiapContext.Contatos.Include(x => x.Telefone).FirstOrDefaultAsync(x => x.Id == pID);
+            var contato = await _FiapContext.Contatos.Include(x => x.Telefone).FirstOrDefaultAsync(x => x.Id == pID);
             return contato;
         }
 
@@ -73,7 +73,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
         /// <exception cref="WarningException"></exception>
         public async Task<Contato> GetByNameAsync(string pNome)
         {
-            var contato = await FiapContext.Contatos
+            var contato = await _FiapContext.Contatos
                                      .Include(x => x.Telefone)
                                      .Where(x => x.Nome == pNome)
                                      .FirstOrDefaultAsync();
@@ -96,7 +96,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
 
             if (contatos > 0)
             {
-                var emailChecker = FiapContext.Contatos.Where(c => c.Email == pContato.Email);
+                var emailChecker = _FiapContext.Contatos.Where(c => c.Email == pContato.Email);
 
                 if (emailChecker.Any())
                     throw new WarningException($"O email inserido já está cadastrado");
@@ -115,7 +115,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
         /// <exception cref="InvalidOperationException"></exception>
         public async Task<IEnumerable<Contato>> GetAllAsync(string? pDDD)
         {
-            var contatos = await FiapContext.Contatos
+            var contatos = await _FiapContext.Contatos
                 .Include(x => x.Telefone)
                 .Where(x => pDDD == x.Telefone.DDD || pDDD == null)
                 .ToListAsync();
@@ -136,8 +136,8 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
             pContatoAtual.Telefone.DDD = pContatoAtualizado.Telefone.DDD;
             pContatoAtual.Telefone.Numero = pContatoAtualizado.Telefone.Numero;
 
-            FiapContext.Update(pContatoAtual);
-            await FiapContext.SaveChangesAsync();
+            _FiapContext.Update(pContatoAtual);
+            await _FiapContext.SaveChangesAsync();
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace TechChallengeFIAP.Infrastructure.Repositories
         /// <returns></returns>
         public async Task<int> CountAsync()
         {
-            return await FiapContext.Contatos.CountAsync();
+            return await _FiapContext.Contatos.CountAsync();
         }
     }
 }

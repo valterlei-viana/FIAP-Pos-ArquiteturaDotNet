@@ -4,8 +4,6 @@ using Microsoft.OpenApi.Models;
 using Prometheus;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
-using TechChallengeFIAP.Consumer;
-using TechChallengeFIAP.Consumer.Consumers;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
 using TechChallengeFIAP.Infrastructure.Data;
@@ -41,8 +39,6 @@ builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseSqlite(sqliteConnecti
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<ContatoInserirConsumer>();
-
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(mTservidor, "/", h =>
@@ -52,11 +48,6 @@ builder.Services.AddMassTransit(x =>
         });
 
         cfg.ConfigureEndpoints(context);
-
-        cfg.ReceiveEndpoint("Contato-Inserir", e =>
-        {
-            e.ConfigureConsumer<ContatoInserirConsumer>(context);
-        });
     });
 });
 

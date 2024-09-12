@@ -1,15 +1,51 @@
+//{
+//  "profiles": {
+//    "TechChallenge.Consumer": {
+//      "commandName": "Project",
+//      "environmentVariables": {
+//        "DOTNET_ENVIRONMENT": "Development"
+//      },
+//      "dotnetRunMessages": true
+//    }
+//  },
+//  "$schema": "http://json.schemastore.org/launchsettings.json"
+//}
 {
-  "profiles": {
-    "TechChallenge.Consumer": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true
-    },
-    "Container (Dockerfile)": {
-      "commandName": "Docker"
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:17408",
+      "sslPort": 44392
     }
   },
-  "$schema": "http://json.schemastore.org/launchsettings.json"
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
 }

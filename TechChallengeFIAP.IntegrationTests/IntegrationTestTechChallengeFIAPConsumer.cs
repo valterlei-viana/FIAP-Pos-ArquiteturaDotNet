@@ -8,15 +8,5 @@ namespace TechChallengeFIAP.IntegrationTests
 {
     public class IntegrationTestTechChallengeFIAPConsumer : WebApplicationFactory<TechChallengeFIAPConsumer>
     {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            builder.Configure(_ => { });
-        }
-
-        public Task RunHostAsync()
-        {
-            var host = Services.GetRequiredService<IHost>();
-            return host.WaitForShutdownAsync();
-        }
     }
 }
