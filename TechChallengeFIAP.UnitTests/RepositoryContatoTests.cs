@@ -71,14 +71,14 @@ namespace TechChallengeFIAP.UnitTests
             // Arrange      
             var currentEntity = new Contato
             {
-                Nome = "Valterley",
-                Email = "valterley@fiap.com",
+                Nome = "Valterlei",
+                Email = "valterlei@fiap.com",
                 Telefone = new Telefone { DDD = "11", Numero = "982598878" }
             };
 
             var updatedEntity = new Contato
             {
-                Nome = "Valterley",
+                Nome = "Valterlei",
                 Email = "novoemail@fiap.com",
                 Telefone = new Telefone { DDD = "11", Numero = "999877178" }
             };

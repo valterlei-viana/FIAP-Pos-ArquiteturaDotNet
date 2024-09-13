@@ -5,13 +5,15 @@ using TechChallengeFIAP.Core.Entities;
 
 namespace TechChallengeFIAP.IntegrationTests
 {
-    public class ApiIntegrationTests : IDisposable
+    [TestFixture]
+    public class IntegrationTests : IDisposable
     {
         private IntegrationTestTechChallengeFIAPAPI FIAPAPI;
-        private IntegrationTestTechChallengeFIAPConsumer FIAPConsumer;
-        private HttpClient clientAPI, clientConsumer;
-        private int id;
+        private HttpClient clientAPI;
         private string guid = Guid.NewGuid().ToString();
+        private IntegrationTestTechChallengeFIAPConsumer FIAPConsumer;
+        private HttpClient clientConsumer;
+        private int Id;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -27,18 +29,11 @@ namespace TechChallengeFIAP.IntegrationTests
             clientAPI = FIAPAPI.CreateClient();
         }
 
-        [TearDown]
-        public async Task Teardown()
-        {
-            clientConsumer = FIAPConsumer.CreateClient();
-            await Task.Delay(1000);
-        }
-
         public void Dispose()
         {
-            FIAPConsumer?.Dispose();
             FIAPAPI?.Dispose();
             clientAPI?.Dispose();
+            FIAPConsumer?.Dispose();
             clientConsumer?.Dispose();
         }
 
@@ -60,7 +55,11 @@ namespace TechChallengeFIAP.IntegrationTests
             };
 
             var result = await clientAPI.PostAsJsonAsync(url, contato);
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));            
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+
+            clientConsumer = FIAPConsumer.CreateClient();
+            await Task.Delay(3000);
+            Id = await BuscarId();
         }
 
         [Test, Order(2)]
@@ -73,7 +72,8 @@ namespace TechChallengeFIAP.IntegrationTests
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             ClassicAssert.IsNotNull(contatos);
-            ClassicAssert.IsTrue(contatos.Where(x => x.Nome == guid).Single() != null);
+            var contato = contatos.Where(x => x.Nome == guid).Single();
+            ClassicAssert.IsTrue(contato.Nome.Equals(guid));
         }
 
         [Test, Order(3)]
@@ -87,27 +87,26 @@ namespace TechChallengeFIAP.IntegrationTests
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             ClassicAssert.IsNotNull(contato);
             ClassicAssert.IsTrue(contato.Email == $"{guid}@gmail.com");
-            id = contato.Id;
         }
 
-        [Test, Order(7)]
+        [Test, Order(6)]
         public async Task Buscar_Id()
         {
-            var url = $"Contato/Buscar/Id?id={id.ToString()}";
+            var url = $"Contato/Buscar/Id?id={Id.ToString()}";
 
             var result = await clientAPI.GetAsync(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
-        [Test, Order(5)]
+        [Test, Order(4)]
         public async Task Atualizar_Contato()
         {
             var url = "/Contato/Atualizar";
 
-            var contato = new Contato()
+            var contatoAtualizado = new Contato()
             {
-                Id = id,
+                Id = Id,
                 Email = $"{guid}@gmail.com",
                 Nome = $"{guid} - Atualizado",
                 Telefone = new Telefone()
@@ -117,26 +116,39 @@ namespace TechChallengeFIAP.IntegrationTests
                 }
             };
 
-            var result = await clientAPI.PutAsJsonAsync(url, contato);
+            var result = await clientAPI.PutAsJsonAsync(url, contatoAtualizado);
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            clientConsumer = FIAPConsumer.CreateClient();
+            await Task.Delay(3000);
 
-            url = $"Contato/Buscar/Id?id={id.ToString()}";
+            url = $"Contato/Buscar/Id?id={Id.ToString()}";
 
             result = await clientAPI.GetAsync(url);
-            contato = await clientAPI.GetFromJsonAsync<Contato>(url);
+            var contato = await clientAPI.GetFromJsonAsync<Contato>(url);
 
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             ClassicAssert.IsNotNull(contato);
             ClassicAssert.IsTrue(contato.Nome == $"{guid} - Atualizado");
         }
 
-        [Test, Order(6)]
+        private async Task<int> BuscarId()
+        {
+            var url = $"/Contato/Buscar/Nome?nome={guid}";
+            var result = await clientAPI.GetAsync(url);
+            var contato = await clientAPI.GetFromJsonAsync<Contato>(url);
+            var r = contato is null ? 0 : contato.Id;
+            return r;
+        }
+
+        [Test, Order(5)]
         public async Task Excluir_Contato()
         {
-            var url = $"/Contato/Excluir?id={id.ToString()}";
+            var url = $"/Contato/Excluir?id={Id.ToString()}";
 
             var result = await clientAPI.DeleteAsync(url);
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            clientConsumer = FIAPConsumer.CreateClient();
+            await Task.Delay(3000);
         }
     }
 }

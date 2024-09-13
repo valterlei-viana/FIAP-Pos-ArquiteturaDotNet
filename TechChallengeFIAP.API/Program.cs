@@ -1,6 +1,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using NUnit.Framework;
 using Prometheus;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
@@ -16,6 +17,16 @@ var mTservidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.E
 var mTusuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
 var mTsenha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
 var sqliteConnectionString = configuration.GetSection("ConexaoSqlite")["SqliteConnectionString"] ?? string.Empty;
+string solutionDir;
+
+if (TestContext.CurrentContext.TestDirectory.Contains("TechChallengeFIAP.IntegrationTests"))
+{
+    solutionDir = TestContext.CurrentContext.TestDirectory;
+    sqliteConnectionString = sqliteConnectionString
+        .Substring(sqliteConnectionString.LastIndexOf("/", StringComparison.Ordinal))
+        .Replace("/", "\\");
+    sqliteConnectionString = "Data Source = " + solutionDir + sqliteConnectionString;
+}
 
 builder.Services.AddEndpointsApiExplorer();
 

@@ -12,15 +12,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BF76ED7B-929B-49D7-B536-19F374848AE4}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\ci-cd.yml = .github\workflows\ci-cd.yml
+		docker-compose-test.yml = docker-compose-test.yml
+		Containers\docker-compose.yml = Containers\docker-compose.yml
+		Containers\prom\prometheus.yml = Containers\prom\prometheus.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallengeFIAP.UnitTests", "TechChallengeFIAP.UnitTests\TechChallengeFIAP.UnitTests.csproj", "{66E3C310-7A5E-4C01-B048-CF9389EB9B84}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrometheusGrafana", "PrometheusGrafana", "{5CE75C2E-D2FF-4DF4-9F4C-7A6248D05FB1}"
-	ProjectSection(SolutionItems) = preProject
-		PrometheusGrafana\docker-compose.yml = PrometheusGrafana\docker-compose.yml
-		PrometheusGrafana\prom\prometheus.yml = PrometheusGrafana\prom\prometheus.yml
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechChallengeFIAP.IntegrationTests", "TechChallengeFIAP.IntegrationTests\TechChallengeFIAP.IntegrationTests.csproj", "{BA3E996B-87BB-47F9-B484-FEA162E97A69}"
 EndProject
