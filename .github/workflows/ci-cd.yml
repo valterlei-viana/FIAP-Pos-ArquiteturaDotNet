@@ -39,8 +39,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set up Docker Compose
-      run: docker-compose -f docker-compose-cicd.yml up -d
+    # - name: Set up Docker Compose
+      # run: docker-compose -f docker-compose-cicd.yml up -d
 
     # Install the .NET Core workload
     - name: Install .NET Core
