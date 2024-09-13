@@ -29,33 +29,24 @@ jobs:
           --health-retries 5
     
     env:
-      Solution_Name: fiap.sln
-      # UnitTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.UnitTests\TechChallengeFIAP.UnitTests.csproj
-      # IntegrationTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.IntegrationTests\TechChallengeFIAP.IntegrationTests.csproj
+      Solution_Name: FIAP.sln
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    # - name: Set up Docker Compose
-      # run: docker-compose -f docker-compose-cicd.yml up -d
-
-    # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Install dependencies
+      run: dotnet restore
 
-    # Build the solution
-    - name: Build project
+    - name: Build
       run: dotnet build
-        
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
+    
+    - name: Test with the dotnet CLI
       run: dotnet test
