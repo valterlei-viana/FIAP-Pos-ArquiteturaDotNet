@@ -13,17 +13,9 @@ var configuration = builder.Configuration;
 var mTservidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
 var mTusuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
 var mTsenha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
-var sqliteConnectionString = configuration.GetSection("ConexaoSqlite")["SqliteConnectionString"] ?? string.Empty;
-string solutionDir;
-
-if (TestContext.CurrentContext.TestDirectory.Contains("TechChallengeFIAP.IntegrationTests"))
-{
-    solutionDir = TestContext.CurrentContext.TestDirectory;
-    sqliteConnectionString = sqliteConnectionString
-        .Substring(sqliteConnectionString.LastIndexOf("/", StringComparison.Ordinal))
-        .Replace("/", "\\");
-    sqliteConnectionString = "Data Source = " + solutionDir + sqliteConnectionString;
-}
+var sqlLiteFileName = configuration.GetSection("ConexaoSqlite")["SqlLiteFileName"] ?? string.Empty;
+var solutionDir = Directory.GetParent(TestContext.CurrentContext.TestDirectory).Parent.Parent.Parent.FullName;
+var sqliteConnectionString = "Data Source = " + Path.Combine(solutionDir, sqlLiteFileName);
 
 builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseSqlite(sqliteConnectionString));
 
