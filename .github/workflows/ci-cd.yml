@@ -30,8 +30,8 @@ jobs:
     
     env:
       Solution_Name: fiap.sln
-      UnitTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.UnitTests\TechChallengeFIAP.UnitTests.csproj
-      IntegrationTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.IntegrationTests\TechChallengeFIAP.IntegrationTests.csproj
+      # UnitTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.UnitTests\TechChallengeFIAP.UnitTests.csproj
+      # IntegrationTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.IntegrationTests\TechChallengeFIAP.IntegrationTests.csproj
 
     steps:
     - name: Checkout
