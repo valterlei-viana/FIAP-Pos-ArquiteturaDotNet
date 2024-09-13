@@ -1,5 +1,5 @@
 services:
-  rabbitmq:
+   rabbitmq:
     image: masstransit/rabbitmq
     container_name: dev_rabbitmq
     ports:

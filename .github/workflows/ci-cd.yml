@@ -18,10 +18,13 @@ jobs:
   
     services:
       rabbitmq:
-        image: rabbitmq:3-management
+        image: masstransit/rabbitmq
         ports:
           - 5672:5672
           - 15672:15672
+        volumes:
+          - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+          - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
         options: >-
           --health-cmd "curl -f http://localhost:15672 || exit 1"
           --health-interval 10s
@@ -30,13 +33,17 @@ jobs:
     
     env:
       Solution_Name: fiap.sln
-      Test_Project_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.UnitTests\TechChallengeFIAP.UnitTests.csproj
+      UnitTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.UnitTests\TechChallengeFIAP.UnitTests.csproj
+      IntegrationTest_Path: FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.IntegrationTests\TechChallengeFIAP.IntegrationTests.csproj
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+
+    - name: Set up Docker Compose
+      run: docker-compose -f docker-compose-cicd.yml up -d
 
     # Install the .NET Core workload
     - name: Install .NET Core
