@@ -22,9 +22,6 @@ jobs:
         ports:
           - 5672:5672
           - 15672:15672
-        volumes:
-          - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-          - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
         options: >-
           --health-cmd "curl -f http://localhost:15672 || exit 1"
           --health-interval 10s
