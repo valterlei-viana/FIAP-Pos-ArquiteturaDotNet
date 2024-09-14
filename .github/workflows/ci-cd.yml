@@ -27,6 +27,13 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+      mysql:
+        image: mysql
+        ports:
+          - 3306:3306
+        environment:
+          MYSQL_ROOT_PASSWORD: 123456
     
     env:
       Solution_Name: FIAP.sln

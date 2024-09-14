@@ -3,7 +3,7 @@
     image: ubuntu/prometheus
     container_name: dev_prometheus
     ports:
-      - "30090:9090"
+      - 30090:9090
     environment:
       - TZ=UTC
     volumes:
@@ -13,7 +13,7 @@
     image: grafana/grafana
     container_name: dev_grafana
     ports:
-      - "30091:3000"
+      - 30091:3000
     volumes:
       - ./grafana-data/data:/var/lib/grafana
     depends_on:
@@ -25,7 +25,12 @@
     ports:
       - 5672:5672
       - 15672:15672
-    # volumes:
-    #   - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-    #   - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
   
+  mysql:
+    image: mysql
+    container_name: dev_mysql
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
