@@ -20,7 +20,8 @@ namespace TechChallengeFIAP.Infrastructure.Data
 
             base.OnModelCreating(builder);
 
-            base.Database.Migrate();
+            if (base.Database.IsRelational())
+                base.Database.Migrate();
         }
     }
 }
