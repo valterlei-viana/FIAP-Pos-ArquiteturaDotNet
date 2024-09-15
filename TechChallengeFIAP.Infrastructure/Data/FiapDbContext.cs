@@ -17,11 +17,6 @@ namespace TechChallengeFIAP.Infrastructure.Data
         {
             builder.Entity<Contato>().HasKey(m => m.Id);
             builder.Entity<Telefone>().HasKey(m => m.Id);
-
-            base.OnModelCreating(builder);
-
-            if (base.Database.IsRelational())
-                base.Database.Migrate();
         }
     }
 }

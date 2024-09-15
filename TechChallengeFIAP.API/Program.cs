@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Prometheus;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Reflection;
 using TechChallengeFIAP.Core.Entities;
 using TechChallengeFIAP.Core.Interfaces;
@@ -58,6 +59,10 @@ builder.Services.AddMassTransit(x =>
 ServiceInterfaces.Add(builder.Services);
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+await using var dbContext = scope.ServiceProvider.GetRequiredService<FiapDbContext>();
+await dbContext.Database.MigrateAsync();
 
 if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
