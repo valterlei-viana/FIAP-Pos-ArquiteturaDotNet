@@ -11,8 +11,8 @@ using TechChallengeFIAP.Infrastructure.Data;
 namespace TechChallengeFIAP.API.Migrations
 {
     [DbContext(typeof(FiapDbContext))]
-    [Migration("20240915180756_inicial")]
-    partial class inicial
+    [Migration("20240915194630_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
