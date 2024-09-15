@@ -57,9 +57,9 @@ namespace TechChallengeFIAP.IntegrationTests
             var result = await clientAPI.PostAsJsonAsync(url, contato);
             Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
 
-            //clientConsumer = FIAPConsumer.CreateClient();
+            clientConsumer = FIAPConsumer.CreateClient();
             await Task.Delay(3000);
-            //Id = await BuscarId();
+            Id = await BuscarId();
         }
 
         //[Test, Order(2)]
