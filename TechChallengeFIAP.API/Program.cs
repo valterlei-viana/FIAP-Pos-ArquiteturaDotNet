@@ -1,7 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using NUnit.Framework;
 using Prometheus;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
@@ -16,9 +15,7 @@ var configuration = builder.Configuration;
 var mTservidor = configuration.GetSection("MassTransit")["Servidor"] ?? string.Empty;
 var mTusuario = configuration.GetSection("MassTransit")["Usuario"] ?? string.Empty;
 var mTsenha = configuration.GetSection("MassTransit")["Senha"] ?? string.Empty;
-var sqlLiteFileName = configuration.GetSection("ConexaoSqlite")["SqlLiteFileName"] ?? string.Empty;
-var solutionDir = Directory.GetParent(TestContext.CurrentContext.TestDirectory).Parent.Parent.Parent.FullName;
-var sqliteConnectionString = "Data Source = " + Path.Combine(solutionDir, sqlLiteFileName);
+var mySqlConnectionString = configuration.GetSection("MySQL")["MySqlConnectionString"] ?? string.Empty; ;
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -38,7 +35,11 @@ builder.Services.AddSwaggerGen(c =>
     c.EnableAnnotations();
 });
 
-builder.Services.AddDbContext<FiapDbContext>(opt => opt.UseSqlite(sqliteConnectionString));
+builder.Services.AddDbContext<FiapDbContext>(opt => opt
+.UseMySql(
+    mySqlConnectionString, 
+    ServerVersion.AutoDetect(mySqlConnectionString),
+    opt => opt.MigrationsAssembly("TechChallengeFIAP.API")));
 
 builder.Services.AddMassTransit(x =>
 {
