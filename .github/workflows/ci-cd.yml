@@ -32,12 +32,9 @@ jobs:
         image: mysql
         ports:
           - 3306:3306
-        environment:
+        env:
           MYSQL_ROOT_PASSWORD: 123456
     
-    env:
-      Solution_Name: FIAP.sln
-
     steps:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
