@@ -6,10 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <PublishAot>false</PublishAot>
-    <UserSecretsId>dotnet-TechChallenge.Consumer-52b27f50-178d-4f24-b90e-e26cc576f340</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
+	
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
