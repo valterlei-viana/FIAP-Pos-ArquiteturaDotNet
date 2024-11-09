@@ -10,8 +10,6 @@ jobs:
   container-job:
     runs-on: ubuntu-latest
     
-    #container: node:20-bookworm-slim
-   
     services:
       rabbitmq:
         image: masstransit/rabbitmq
@@ -53,7 +51,7 @@ jobs:
       run: dotnet build
     
     - name: Test with the dotnet CLI
-      run: dotnet test
+      run: docker compose run --build --rm server dotnet test
 
 # jobs:
 #   build:
