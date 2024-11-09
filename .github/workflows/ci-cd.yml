@@ -10,7 +10,7 @@ jobs:
   container-job:
     runs-on: ubuntu-latest
     
-    container: node:20-bookworm-slim
+    #container: node:20-bookworm-slim
    
     services:
       rabbitmq:
