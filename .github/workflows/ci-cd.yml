@@ -7,7 +7,12 @@ on:
     branches: [ "main" ]
  
 jobs:
-  container-job:
+  build:
+  
+    strategy:
+      matrix:
+        configuration: [Release]
+
     runs-on: ubuntu-latest
     
     services:
@@ -28,11 +33,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: 123456
-    
-    strategy:
-      matrix:
-        configuration: [Release]
- 
+          
     steps:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
@@ -51,52 +52,4 @@ jobs:
       run: dotnet build
     
     - name: Test with the dotnet CLI
-      run: docker compose run --build --rm server dotnet test
-
-# jobs:
-#   build:
-  
-#     strategy:
-#       matrix:
-#         configuration: [Release]
-
-#     runs-on: ubuntu-latest
-    
-#     services:
-#       rabbitmq:
-#         image: masstransit/rabbitmq
-#         ports:
-#           - 5672:5672
-#           - 15672:15672
-#         options: >-
-#           --health-cmd "curl -f http://localhost:15672 || exit 1"
-#           --health-interval 10s
-#           --health-timeout 5s
-#           --health-retries 5
-
-#       mysql:
-#         image: mysql
-#         ports:
-#           - 3306:3306
-#         env:
-#           MYSQL_ROOT_PASSWORD: 123456
-          
-#     steps:
-#     - name: Install .NET Core
-#       uses: actions/setup-dotnet@v4
-#       with:
-#         dotnet-version: 8.0.x
-
-#     - name: Checkout
-#       uses: actions/checkout@v4
-#       with:
-#         fetch-depth: 0
-    
-#     - name: Install dependencies
-#       run: dotnet restore
-
-#     - name: Build
-#       run: dotnet build
-    
-#     - name: Test with the dotnet CLI
-#       run: dotnet test
+      run: dotnet test
