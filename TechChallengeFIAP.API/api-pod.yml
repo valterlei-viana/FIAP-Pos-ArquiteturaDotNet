@@ -11,13 +11,13 @@ spec:
     spec:
       containers:
       - name: api-pod
-        image: techchallengefiapapi
-        imagePullPolicy: IfNotPresent
+        image: techchallengefiapapi:dev
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
         env:
         - name: ASPNETCORE_URLS
-          value: http://*:8080
+          value: http://*:80
   selector:
     matchLabels:
         app: api-pod
