@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TechChallengeFIAP.Core\TechChallengeFIAP.Core.csproj" />
     <ProjectReference Include="..\TechChallengeFIAP.Infrastructure\TechChallengeFIAP.Infrastructure.csproj" />
   </ItemGroup>
 
