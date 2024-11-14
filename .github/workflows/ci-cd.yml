@@ -45,14 +45,14 @@ jobs:
       with:
         fetch-depth: 0
     
-    - name: Install dependencies
-      run: dotnet restore ./fiap.sln
-
     - name: list
       run: ls
 
+    - name: Install dependencies
+      run: dotnet restore ./fiap.sln
+
     - name: Build
-      run: dotnet build
+      run: dotnet build ./fiap.sln
     
     - name: Test with the dotnet CLI
-      run: dotnet test
+      run: dotnet test ./fiap.sln
