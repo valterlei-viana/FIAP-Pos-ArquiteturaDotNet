@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: api-pod
-        image: techchallengefiapapi:dev
+        image: techchallengefiapapi
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
