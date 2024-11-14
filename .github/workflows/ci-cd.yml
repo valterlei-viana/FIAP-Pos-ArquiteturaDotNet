@@ -47,6 +47,8 @@ jobs:
     
     - name: Install dependencies
       run: dotnet restore ./fiap.sln
+
+    - name: list
       run: ls
 
     - name: Build
