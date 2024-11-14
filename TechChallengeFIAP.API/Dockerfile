@@ -13,7 +13,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["TechChallengeFIAP.API/TechChallengeFIAP.API.csproj", "TechChallengeFIAP.API/"]
-COPY ["TechChallengeFIAP.Consumer/TechChallengeFIAP.Consumer.csproj", "TechChallengeFIAP.Consumer/"]
 COPY ["TechChallengeFIAP.Infrastructure/TechChallengeFIAP.Infrastructure.csproj", "TechChallengeFIAP.Infrastructure/"]
 COPY ["TechChallengeFIAP.Core/TechChallengeFIAP.Core.csproj", "TechChallengeFIAP.Core/"]
 RUN dotnet restore "./TechChallengeFIAP.API/TechChallengeFIAP.API.csproj"

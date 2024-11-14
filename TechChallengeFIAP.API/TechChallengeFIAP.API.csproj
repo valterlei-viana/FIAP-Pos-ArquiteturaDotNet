@@ -11,8 +11,9 @@
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<UserSecretsId>a173be94-23e4-4447-9164-41a3bf2b8294</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
 		<Compile Remove="Controllers\**" />
 		<Compile Remove="DTOs\**" />
@@ -51,7 +52,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\TechChallengeFIAP.Consumer\TechChallengeFIAP.Consumer.csproj" />
 		<ProjectReference Include="..\TechChallengeFIAP.Infrastructure\TechChallengeFIAP.Infrastructure.csproj" />
 	</ItemGroup>
 
