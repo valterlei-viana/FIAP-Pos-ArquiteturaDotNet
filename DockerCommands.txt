@@ -1,6 +1,0 @@
-docker build -f "C:\Users\valterlei\source\repos\valterlei-viana\FIAP-Pos-ArquiteturaDotNet\TechChallengeFIAP.API\Dockerfile" --force-rm -t techchallengefiapapi:dev --target base  --build-arg "BUILD_CONFIGURATION=Debug" --build-arg "LAUNCHING_FROM_VS=true" --label "com.microsoft.created-by=visual-studio" --label "com.microsoft.visual-studio.project-name=TechChallengeFIAP.API" "C:\Users\valterlei\source\repos\valterlei-viana\FIAP-Pos-ArquiteturaDotNet"
-
-kubectl get all
-
-kubectl apply -f .\api-pod.yml
-
