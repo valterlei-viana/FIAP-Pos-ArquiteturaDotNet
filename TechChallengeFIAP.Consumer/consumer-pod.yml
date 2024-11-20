@@ -1,0 +1,18 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-pod
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: consumer-pod
+    spec:
+      containers:
+      - name: consumer-pod
+        image: techchallengefiapconsumer:latest
+        imagePullPolicy: Never
+  selector:
+    matchLabels:
+        app: consumer-pod

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-pod
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -11,13 +11,13 @@ spec:
     spec:
       containers:
       - name: api-pod
-        image: techchallengefiapapi:dev
+        image: techchallengefiapapi:latest
         imagePullPolicy: Never
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         env:
         - name: ASPNETCORE_URLS
-          value: http://*:80
+          value: http://*:8080
   selector:
     matchLabels:
         app: api-pod
